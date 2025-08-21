@@ -1,58 +1,116 @@
 # SafeFront
 
-A front‑end web security toolkit built with **Vite + React**. Run quick checks on password strength, inspect URLs for red flags, and audit a site's security headers. Includes input sanitization demo.
+[![Live](https://img.shields.io/badge/demo-online-green.svg)](https://safefront-eight.vercel.app/)
+![React](https://img.shields.io/badge/React-18.x-61DAFB?logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?logo=vite&logoColor=white)
+![Vercel](https://img.shields.io/badge/Hosted%20on-Vercel-black?logo=vercel)
+![Security](https://img.shields.io/badge/Focus-Web%20Security-orange)
 
-🌐 **Live Demo:** _Deploy to Vercel and paste your URL here_
+**SafeFront** is a front‑end web security toolkit built with **React + Vite**.  
+It includes a password strength tool, a suspicious URL inspector, a **security headers audit** (via API), and an **XSS sanitization** demo using DOMPurify.
 
-## 🚀 Features
-- **Password Strength Meter** — length/variety scoring with tips
-- **URL Inspector** — flags punycode, IP URLs, too many subdomains, suspicious TLDs, no HTTPS
-- **Security Headers Audit** — serverless/Express endpoint checks common headers (HSTS, CSP, XFO, X‑CTO, Referrer‑Policy, Permissions‑Policy)
-- **Sanitizer Demo** — shows how **DOMPurify** guards against XSS
-- **Responsive, accessible UI**
+🔗 **Live Demo**: https://safefront-eight.vercel.app/
+
+---
+
+## ✨ Features
+- **Password Strength Checker** – entropy/length/character classes
+- **URL Inspector** – flags punycode, IP hosts, suspicious TLDs, many subdomains, and non‑HTTPS
+- **Security Headers Audit** – backend fetch to site and reports CSP, HSTS, XFO, X‑CTO, Referrer‑Policy, Permissions‑Policy
+- **Sanitizer Demo** – shows how DOMPurify prevents XSS
+- **Clean UI** – responsive, lightweight
+
+---
 
 ## 🛠 Tech Stack
 - **Frontend**: React, Vite, CSS
-- **Security**: DOMPurify, custom heuristics
-- **APIs**: Vercel Serverless (production) + Express dev API (local)
+- **Security**: DOMPurify
+- **API**: Serverless endpoint on Vercel (`/api/headers`)
+- **Hosting**: Vercel
 
-## 📂 Project Structure
+---
+
+## 📂 Structure
 ```
 safefront/
-├── api/                # Vercel serverless functions
-│   └── headers.js
-├── server/             # Local dev API (Express)
-│   └── index.js
-├── src/
-│   ├── components/     # PasswordChecker, UrlInspector, HeadersAudit, SanitizerDemo
-│   ├── App.jsx
-│   ├── index.css
-│   └── main.jsx
-├── index.html
-├── package.json
-├── vite.config.js
-└── README.md
+├─ api/                 # Vercel serverless functions
+│  └─ headers.js        # GET /api/headers?url=...
+├─ server/              # Local dev Express server (optional)
+│  └─ index.js
+├─ src/
+│  ├─ components/       # UI widgets
+│  ├─ sections/         # Tools pages
+│  ├─ App.jsx
+│  ├─ main.jsx
+│  └─ index.css
+├─ package.json
+├─ vite.config.js
+└─ index.html
 ```
+
+---
 
 ## 🔧 Local Setup
 ```bash
 npm install
-# start local API (separate terminal)
-npm run dev:api
-# start Vite dev server (http://localhost:5173)
-npm run dev
+npm run dev:api   # starts local API (optional for dev)
+npm run dev       # starts Vite (http://localhost:5173)
 ```
-The Vite dev server proxies **/api** to the local Express API on **5174**.
 
-## 🌐 Deploy (Vercel)
-1. Push to GitHub
-2. Import the repo in Vercel
-3. Framework: **Vite** (auto) • Build: `npm run build` • Output: `dist`
-4. The serverless endpoint `/api/headers` is deployed automatically.
+> Vite proxies `/api` to `http://localhost:5174` during dev (see `vite.config.js`).
 
-## 🔒 Notes
-- The headers endpoint blocks localhost and private IPs to reduce SSRF risk.
-- Some sites block HEAD/GET requests from serverless providers; test your own domain for best results.
+---
 
-## 🏷 Topics
-`react` `vite` `javascript` `security` `headers` `xss` `dompurify` `vercel`
+## 🌐 Deployment
+Deployed on **Vercel** (zero config):
+- **Build:** `npm run build`
+- **Output:** `dist`
+- **API:** `api/headers.js` → `/api/headers`
+
+Live: https://safefront-eight.vercel.app/
+
+---
+
+## 🔎 API: Security Headers Audit
+**Endpoint**
+```
+GET /api/headers?url=https://example.com
+```
+
+**Response**
+```json
+{
+  "ok": true,
+  "url": "https://example.com/",
+  "status": 200,
+  "headers": { "content-security-policy": "...", "strict-transport-security": "..." },
+  "audit": {
+    "hsts": true,
+    "csp": true,
+    "xFrameOptions": true,
+    "xContentTypeOptions": true,
+    "referrerPolicy": true,
+    "permissionsPolicy": false,
+    "httpsRedirectLikely": true
+  }
+}
+```
+
+---
+
+## 🧪 Troubleshooting
+- **`react/jsx-runtime` not found** → ensure `react` and `react-dom` are installed (18.x) and `@vitejs/plugin-react` is enabled in `vite.config.js`.
+- **404 on `/api/headers` in prod** → file must be at repo root: `api/headers.js`.
+- **CORS locally** → use `npm run dev:api` + Vite proxy (already set).
+
+---
+
+## 🏷 GitHub Topics
+```
+react vite javascript security web-security http-headers xss dompurify vercel
+```
+
+---
+
+## 📄 License
+MIT — see `LICENSE`.
