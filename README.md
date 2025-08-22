@@ -98,6 +98,15 @@ GET /api/headers?url=https://example.com
 
 ---
 
+## 📸 Screenshots
+### Mobile View
+<img src="public/screenshot-mobile.png" alt="SafeFront - Mobile" width="320"/>
+
+### Desktop View
+<img src="public/screenshot-desktop.png" alt="SafeFront - Desktop" width="720"/>
+
+---
+
 ## 🧪 Troubleshooting
 - **`react/jsx-runtime` not found** → ensure `react` and `react-dom` are installed (18.x) and `@vitejs/plugin-react` is enabled in `vite.config.js`.
 - **404 on `/api/headers` in prod** → file must be at repo root: `api/headers.js`.
